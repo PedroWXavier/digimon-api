@@ -1,4 +1,4 @@
-package io.github.pedrowxavier.digimon_api;
+package io.github.pedrowxavier.digimonapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

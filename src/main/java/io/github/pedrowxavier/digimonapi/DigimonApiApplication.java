@@ -1,4 +1,4 @@
-package io.github.pedrowxavier.digimon_api;
+package io.github.pedrowxavier.digimonapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
