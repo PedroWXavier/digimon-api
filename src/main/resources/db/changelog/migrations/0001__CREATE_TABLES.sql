@@ -18,7 +18,7 @@ CREATE TABLE generation (
 CREATE TABLE digimon (
                          id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
                          game_code       text NOT NULL REFERENCES game (code) ON UPDATE CASCADE,
-                         number          text NOT NULL,
+                         number          smallint NOT NULL,
                          name            text NOT NULL,
                          generation_code text NOT NULL REFERENCES generation (code) ON UPDATE CASCADE,
                          attribute_code  text NOT NULL REFERENCES attribute (code) ON UPDATE CASCADE,
@@ -29,6 +29,8 @@ CREATE TABLE digimon (
                          UNIQUE (id, game_code)
 );
 
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_digimon_name_trgm ON digimon USING gin (upper(name) gin_trgm_ops);
 CREATE INDEX idx_digimon_generation ON digimon (game_code, generation_code);
 CREATE INDEX idx_digimon_attribute  ON digimon (game_code, attribute_code);
 CREATE INDEX idx_digimon_type       ON digimon (game_code, type_code);
@@ -44,9 +46,8 @@ CREATE TABLE evolution (
                            FOREIGN KEY (to_digimon_id, game_code)
                                REFERENCES digimon (id, game_code) ON UPDATE CASCADE ON DELETE CASCADE,
 
-                           UNIQUE (game_code, from_digimon_id, to_digimon_id),
+                           UNIQUE (from_digimon_id, to_digimon_id),
                            CHECK (from_digimon_id <> to_digimon_id)
 );
 
-CREATE INDEX idx_evolution_from ON evolution (from_digimon_id);
 CREATE INDEX idx_evolution_to   ON evolution (to_digimon_id);
